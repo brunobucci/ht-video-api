@@ -1,5 +1,5 @@
-# Usa uma imagem base do OpenJDK 21
-FROM eclipse-temurin:21-jdk AS build
+# Usa uma imagem base com Maven e JDK 21 para compilar o projeto
+FROM maven:3.9-eclipse-temurin-21 AS build
 
 # Define o diretório de trabalho
 WORKDIR /app
@@ -8,9 +8,9 @@ WORKDIR /app
 COPY . .
 
 # Baixa as dependências e compila o projeto
-RUN ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests
 
-# Criando uma segunda etapa para a imagem final
+# Criando uma segunda etapa para a imagem final, mais leve
 FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
