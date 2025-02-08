@@ -19,7 +19,7 @@ WORKDIR /app
 COPY --from=build /app/target/ht-video-api-*.jar app.jar
 
 # Expõe a porta da aplicação
-EXPOSE 8080
+EXPOSE 8081
 
 # Comando para rodar a aplicação
 CMD ["java", "-jar", "app.jar"]
