@@ -1,6 +1,7 @@
 package com.br.fiap.postech.ht_video_api.infra.database;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,11 @@ public class VideoDatabaseAdapter implements IVideoDatabaseAdapter {
 				video.getTentativasDeEdicao(),
 				video.getStatusEdicao());
 		return videoEntity;
+	}
+
+	@Override
+	public Video findVideoById(String idVideo) {
+		return videoRepository.findVideoById(idVideo);
 	}
 	
 }

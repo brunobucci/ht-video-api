@@ -4,4 +4,5 @@ import org.springframework.messaging.handler.annotation.Payload;
 
 public interface IVideoQueueAdapterIN {
 	void receive(@Payload String message);
+	//void receiveCompactadas(@Payload String message);
 }

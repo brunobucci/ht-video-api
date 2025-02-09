@@ -12,5 +12,8 @@ public interface VideoRepository extends MongoRepository<VideoEntity, String>{
 
 	@Query("{idUsuario:'?0'}")
 	List<Video> findVideosByIdUsuario(String idUsuario);
+	
+	@Query("{id:'?0'}")
+	Video findVideoById(String idVideo);
 
 }

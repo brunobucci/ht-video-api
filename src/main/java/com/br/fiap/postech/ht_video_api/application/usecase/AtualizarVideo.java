@@ -2,20 +2,22 @@ package com.br.fiap.postech.ht_video_api.application.usecase;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.br.fiap.postech.ht_video_api.application.dto.VideoDto;
+import com.br.fiap.postech.ht_video_api.domain.entity.StatusEdicao;
 import com.br.fiap.postech.ht_video_api.domain.entity.Video;
 import com.br.fiap.postech.ht_video_api.domain.repository.IVideoDatabaseAdapter;
 import com.br.fiap.postech.ht_video_api.domain.repository.IVideoQueueAdapterOUT;
-import com.br.fiap.postech.ht_video_api.domain.usecase.RegistrarVideoUseCase;
+import com.br.fiap.postech.ht_video_api.domain.usecase.AtualizarVideoUseCase;
 import com.google.gson.Gson;
 
 @Service
-public class RegistrarVideo implements RegistrarVideoUseCase{
+public class AtualizarVideo implements AtualizarVideoUseCase{
 
 	private final IVideoDatabaseAdapter videoDatabaseAdapter;
     private final IVideoQueueAdapterOUT videoQueueAdapterOUT;
@@ -23,16 +25,19 @@ public class RegistrarVideo implements RegistrarVideoUseCase{
     @Autowired
     private Gson gson;
     
-    public RegistrarVideo(IVideoDatabaseAdapter videoDatabaseAdapter, IVideoQueueAdapterOUT videoQueueAdapterOUT) {
+    public AtualizarVideo(IVideoDatabaseAdapter videoDatabaseAdapter , IVideoQueueAdapterOUT videoQueueAdapterOUT) {
     	this.videoDatabaseAdapter = videoDatabaseAdapter;
         this.videoQueueAdapterOUT = videoQueueAdapterOUT;
     }
     
 	@Transactional
 	public VideoDto executar(VideoDto videoDto) {
-		Video video = new Video(videoDto.getNome(),videoDto.getIdUsuario());
+		Video video = new Video(videoDto.getId(), videoDto.getIdUsuario(), UUID.fromString(videoDto.getCodigoEdicao()), videoDto.getNome(), videoDto.getTentativasDeEdicao(), videoDto.getStatusEdicao());
+		
 		Video videoSalvo = videoDatabaseAdapter.save(video);
-		videoQueueAdapterOUT.publish(toVideoMessage(videoSalvo));
+		if(videoSalvo.getStatusEdicao().equals(StatusEdicao.COM_ERRO)) {
+			videoQueueAdapterOUT.publish(toVideoMessage(videoSalvo));
+		}
         return toVideoDto(videoSalvo);
 	}
 
