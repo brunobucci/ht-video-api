@@ -21,6 +21,6 @@ public class VideoEntity {
 	private String idUsuario;
 	private UUID codigoEdicao;
 	private String nome;
-	private Long tentativasDeEdicao;
+	private String tentativasDeEdicao;
 	private StatusEdicao statusEdicao;
 }

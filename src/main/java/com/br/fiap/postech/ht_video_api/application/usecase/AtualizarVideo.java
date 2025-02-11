@@ -21,10 +21,7 @@ public class AtualizarVideo implements AtualizarVideoUseCase{
 
 	private final IVideoDatabaseAdapter videoDatabaseAdapter;
     private final IVideoQueueAdapterOUT videoQueueAdapterOUT;
-	
-    @Autowired
-    private Gson gson;
-    
+
     public AtualizarVideo(IVideoDatabaseAdapter videoDatabaseAdapter , IVideoQueueAdapterOUT videoQueueAdapterOUT) {
     	this.videoDatabaseAdapter = videoDatabaseAdapter;
         this.videoQueueAdapterOUT = videoQueueAdapterOUT;
@@ -52,11 +49,12 @@ public class AtualizarVideo implements AtualizarVideoUseCase{
 	 }
 
     private String toVideoMessage(Video video){
-        Map message = new HashMap<String, String>();
+        Map<Object, Object> message = new HashMap<>();
         message.put("id",video.getId());
         message.put("nomeVideo",video.getNome());
         message.put("codigoEdicao",video.getCodigoEdicao().toString());
+        message.put("tentativasDeEdicao",video.getTentativasDeEdicao());
         message.put("statusEdicao",video.getStatusEdicao());
-        return gson.toJson(message);
+        return new Gson().toJson(message);
     }
 }

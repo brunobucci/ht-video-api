@@ -24,7 +24,7 @@ public class VideoDto {
 	private String nome;
 
 	@Schema(example = "1",accessMode = Schema.AccessMode.READ_ONLY)
-	private Long tentativasDeEdicao;
+	private String tentativasDeEdicao;
 	
 	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private StatusEdicao statusEdicao;

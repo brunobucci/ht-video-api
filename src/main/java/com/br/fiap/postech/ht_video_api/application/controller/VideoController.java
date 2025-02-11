@@ -36,13 +36,12 @@ public class VideoController {
         this.listarVideosPorUsuarioUseCase = listarVideosPorUsuarioUseCase;
     }
     
-    
     @SuppressWarnings("rawtypes")
-	@PostMapping(value="/registrar-video", produces = "application/json")
-    public ResponseEntity registrarUsuario(@RequestBody VideoDto videoDto) {
+	@PostMapping(value="/registrar-videos", produces = "application/json")
+    public ResponseEntity registrarVideos(@RequestBody List<VideoDto> listaVideoDto) {
     	try {
-    		VideoDto videoDtoSalvo = registrarVideoPedidoUseCase.executar(videoDto);
-            return ResponseEntity.status(HttpStatus.OK).body(videoDtoSalvo);
+    		List<VideoDto> listaVideoDtoGravada = registrarVideoPedidoUseCase.executar(listaVideoDto);
+            return ResponseEntity.status(HttpStatus.OK).body(listaVideoDtoGravada);
         } catch (Exception ex) {
             logger.error(ex.getMessage(),ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
