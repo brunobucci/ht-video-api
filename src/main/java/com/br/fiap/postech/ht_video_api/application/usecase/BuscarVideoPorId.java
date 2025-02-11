@@ -1,5 +1,7 @@
 package com.br.fiap.postech.ht_video_api.application.usecase;
 
+import java.util.Objects;
+
 import org.springframework.stereotype.Service;
 
 import com.br.fiap.postech.ht_video_api.application.dto.VideoDto;
@@ -17,7 +19,11 @@ public class BuscarVideoPorId implements BuscarVideoPorIdUseCase{
     }
     
 	public VideoDto executar(String idVideo) {
-		return toVideoDto(videoDatabaseAdapter.findVideoById(idVideo));
+		Video video = videoDatabaseAdapter.findVideoById(idVideo);
+		if(Objects.nonNull(video)) {
+			return toVideoDto(video);
+		}
+		return null;
 	}
 
 	 private VideoDto toVideoDto(Video video){

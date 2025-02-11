@@ -5,7 +5,9 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,12 +18,12 @@ public class Video {
         this.nome = nome;
         this.idUsuario = idUsuario;
         this.statusEdicao = StatusEdicao.CRIADA;
-        this.tentativasDeEdicao = 0l;
+        this.tentativasDeEdicao = "1";
     }
 	private String id;
 	private String idUsuario;
 	private UUID codigoEdicao;
 	private String nome;
-	private Long tentativasDeEdicao;
+	private String tentativasDeEdicao;
     private StatusEdicao statusEdicao;
 }

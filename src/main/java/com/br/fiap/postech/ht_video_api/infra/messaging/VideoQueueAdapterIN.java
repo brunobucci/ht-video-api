@@ -36,16 +36,16 @@ public class VideoQueueAdapterIN implements IVideoQueueAdapterIN{
 	@SuppressWarnings("unchecked")
 	@RabbitListener(queues = {"${queue2.name}"})
 	public void receive(@Payload String message) {
-		HashMap<String, String> mensagem = gson.fromJson(message, HashMap.class);
+		HashMap<String, String> mensagem = new Gson().fromJson(message, HashMap.class);
 		VideoDto videoMenssagem = fromMessageToDto(mensagem);
 		
 		VideoDto videoSalvo = buscarVideoPorIdUseCase.executar(videoMenssagem.getId());
 		
 		if(videoMenssagem.getStatusEdicao().equals(StatusEdicao.COM_ERRO)) {
-			long nroTentativas = videoSalvo.getTentativasDeEdicao();
+			long nroTentativas = Long.parseLong(videoSalvo.getTentativasDeEdicao());
 			if(nroTentativas < 3l) {
 				nroTentativas++;
-				videoSalvo.setTentativasDeEdicao(nroTentativas);
+				videoSalvo.setTentativasDeEdicao(nroTentativas+"");
 				videoSalvo.setStatusEdicao(StatusEdicao.COM_ERRO);
 				atualizarVideoUsecase.executar(videoSalvo);
 			}
@@ -56,23 +56,13 @@ public class VideoQueueAdapterIN implements IVideoQueueAdapterIN{
 		
 	}
 	
-//	@SuppressWarnings("unchecked")
-//	@RabbitListener(queues = {"${queue3.name}"})
-//	public void receiveCompactadas(@Payload String message) {
-//		HashMap<String, String> mensagem = gson.fromJson(message, HashMap.class);
-//		VideoDto videoMenssagem = fromMessageToDto(mensagem);
-//		VideoDto videoSalvo = buscarVideoPorIdUseCase.executar(videoMenssagem.getId());
-//		videoSalvo.setStatusEdicao(StatusEdicao.FINALIZADA);
-//		atualizarVideoUsecase.executar(videoSalvo);
-//	}
-	
 	static VideoDto fromMessageToDto(Map<String, String> mensagem) {
 		return new VideoDto(
 				mensagem.get("id"),
 				null,
 				mensagem.get("codigoEdicao"),
 				mensagem.get("nomeVideo"), 
-				null, 
+				mensagem.get("tentativasDeEdicao"), 
 				StatusEdicao.valueOf(mensagem.get("statusEdicao")));
 	}
 }
